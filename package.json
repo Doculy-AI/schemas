@@ -2,11 +2,21 @@
   "name": "@doculy-ai/schemas",
   "version": "1.0.0",
   "description": "JSON schemas for Yuli configuration validation",
-  "private": true,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "schemas",
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
     "validate": "ajv compile -s 'schemas/**/*.schema.json' -c ajv-formats --strict=true",
     "build": "npm run validate",
     "test": "npm run validate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Doculy-AI/schemas.git"
   },
   "devDependencies": {
     "ajv-cli": "^5.0.0",
