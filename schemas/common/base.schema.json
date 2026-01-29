@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/common/base.schema.json",
+  "title": "Base Configuration Schema",
+  "description": "Common definitions shared across all configuration schemas",
+  "type": "object",
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tableName": {
+      "type": "string",
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "description": "Valid PostgreSQL table name (lowercase, underscores)"
+    },
+    "schemaName": {
+      "type": "string",
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "default": "public",
+      "description": "PostgreSQL schema name"
+    }
+  }
+}

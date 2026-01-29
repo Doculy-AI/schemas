@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/Doculy-AI/schemas/main/schemas/importers/transit.schema.json",
+  "title": "GTFS Transit Importer Configuration",
+  "description": "Configuration for importing GTFS transit data",
+  "type": "object",
+  "required": ["url", "agencyId"],
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to GTFS feed (zip file)"
+    },
+    "agencyId": {
+      "type": "string",
+      "description": "Unique identifier for the transit agency",
+      "pattern": "^[a-z0-9_-]+$"
+    },
+    "agencyName": {
+      "type": "string",
+      "description": "Human-readable agency name"
+    },
+    "schema": {
+      "type": "string",
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "description": "Target PostgreSQL schema",
+      "default": "transit"
+    },
+    "includeShapes": {
+      "type": "boolean",
+      "description": "Import route shapes as geometries",
+      "default": true
+    },
+    "generateStopBuffers": {
+      "type": "boolean",
+      "description": "Generate buffer geometries around stops",
+      "default": false
+    },
+    "stopBufferDistances": {
+      "type": "array",
+      "description": "Buffer distances for stop buffers",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+(\\.\\d+)?\\s*(mi|km|m|ft)$"
+      },
+      "default": ["0.25 mi", "0.5 mi"]
+    }
+  },
+  "additionalProperties": false
+}
