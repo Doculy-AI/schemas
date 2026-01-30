@@ -8,33 +8,75 @@
     "service": "geopackage",
     "action": "import"
   },
-  "required": ["file", "table"],
+  "required": [
+    "file",
+    "table"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "file": {
       "type": "string",
       "description": "Path to GeoPackage file (local path, URL, or gs:// GCS path)",
-      "examples": ["data.gpkg", "https://example.com/data.gpkg", "gs://bucket/file.gpkg"]
+      "examples": [
+        "data.gpkg",
+        "https://example.com/data.gpkg",
+        "gs://bucket/file.gpkg"
+      ]
     },
     "table": {
       "type": "string",
       "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
       "description": "Target PostgreSQL table name (schema.table format)",
-      "examples": ["staging.parcels", "state_tx.boundaries"]
+      "examples": [
+        "staging.parcels",
+        "state_tx.boundaries"
+      ]
     },
     "layer": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "description": "Specific layer name(s) to import"
     },
     "layerIndex": {
       "oneOf": [
-        { "type": "integer", "minimum": 0 },
-        { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
       ],
       "description": "Layer index(es) to import (0-based)"
     },
@@ -45,7 +87,16 @@
     },
     "geometryType": {
       "type": "string",
-      "enum": ["POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION", "GEOMETRY"],
+      "enum": [
+        "POINT",
+        "MULTIPOINT",
+        "LINESTRING",
+        "MULTILINESTRING",
+        "POLYGON",
+        "MULTIPOLYGON",
+        "GEOMETRYCOLLECTION",
+        "GEOMETRY"
+      ],
       "description": "Geometry type override"
     },
     "mixedGeometries": {
@@ -60,7 +111,13 @@
         "type": "string",
         "pattern": "^\\d+(\\.\\d+)?\\s*(mi|km|m|ft)$"
       },
-      "examples": [["500 ft", "1 mi", "5 mi"]]
+      "examples": [
+        [
+          "500 ft",
+          "1 mi",
+          "5 mi"
+        ]
+      ]
     },
     "clear": {
       "type": "boolean",

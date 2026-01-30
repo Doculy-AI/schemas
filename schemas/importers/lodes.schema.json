@@ -8,14 +8,91 @@
     "service": "lodes",
     "action": "import"
   },
-  "required": ["state", "lodesYear"],
+  "required": [
+    "state",
+    "lodesYear"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "state": {
-      "$ref": "../common/state.schema.json#/$defs/stateCode",
-      "description": "Two-letter US state code"
+      "type": "string",
+      "description": "Two-letter US state code",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "DC",
+        "PR",
+        "VI",
+        "GU",
+        "AS",
+        "MP"
+      ]
     },
     "lodesYear": {
       "type": "integer",
@@ -32,13 +109,47 @@
     "jobType": {
       "type": "string",
       "description": "Job type filter",
-      "enum": ["JT00", "JT01", "JT02", "JT03", "JT04", "JT05", "all", "primary", "private", "priv_primary", "federal", "fed_primary"],
+      "enum": [
+        "JT00",
+        "JT01",
+        "JT02",
+        "JT03",
+        "JT04",
+        "JT05",
+        "all",
+        "primary",
+        "private",
+        "priv_primary",
+        "federal",
+        "fed_primary"
+      ],
       "default": "JT00"
     },
     "segment": {
       "type": "string",
       "description": "Worker segment filter",
-      "enum": ["S000", "SA01", "SA02", "SA03", "SE01", "SE02", "SE03", "SI01", "SI02", "SI03", "all_workers", "age_29_under", "age_30_54", "age_55_over", "income_1250_under", "income_1251_3333", "income_3333_over", "goods_producing", "trade_transport_util", "other_services"],
+      "enum": [
+        "S000",
+        "SA01",
+        "SA02",
+        "SA03",
+        "SE01",
+        "SE02",
+        "SE03",
+        "SI01",
+        "SI02",
+        "SI03",
+        "all_workers",
+        "age_29_under",
+        "age_30_54",
+        "age_55_over",
+        "income_1250_under",
+        "income_1251_3333",
+        "income_3333_over",
+        "goods_producing",
+        "trade_transport_util",
+        "other_services"
+      ],
       "default": "S000"
     },
     "clear": {

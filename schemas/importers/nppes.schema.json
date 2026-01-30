@@ -8,14 +8,90 @@
     "service": "nppes",
     "action": "import"
   },
-  "required": ["state"],
+  "required": [
+    "state"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "state": {
-      "$ref": "../common/state.schema.json#/$defs/stateCode",
-      "description": "Two-letter US state code"
+      "type": "string",
+      "description": "Two-letter US state code",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "DC",
+        "PR",
+        "VI",
+        "GU",
+        "AS",
+        "MP"
+      ]
     },
     "year": {
       "type": "integer",
@@ -26,8 +102,15 @@
     "taxonomyCodes": {
       "type": "array",
       "description": "Provider taxonomy codes to filter (imports all if not specified)",
-      "items": { "type": "string" },
-      "examples": [["207R00000X", "208D00000X"]]
+      "items": {
+        "type": "string"
+      },
+      "examples": [
+        [
+          "207R00000X",
+          "208D00000X"
+        ]
+      ]
     },
     "clear": {
       "type": "boolean",

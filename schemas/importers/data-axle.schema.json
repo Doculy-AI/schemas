@@ -8,30 +8,115 @@
     "service": "data-axle",
     "action": "import"
   },
-  "required": ["file", "table"],
+  "required": [
+    "file",
+    "table"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "file": {
       "type": "string",
       "description": "Path to Data Axle data file",
-      "examples": ["data-axle-export.csv", "gs://bucket/data-axle.csv"]
+      "examples": [
+        "data-axle-export.csv",
+        "gs://bucket/data-axle.csv"
+      ]
     },
     "table": {
       "type": "string",
       "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
       "description": "Target PostgreSQL table name",
-      "examples": ["staging.businesses", "state_tx.data_axle"]
+      "examples": [
+        "staging.businesses",
+        "state_tx.data_axle"
+      ]
     },
     "state": {
-      "$ref": "../common/state.schema.json#/$defs/stateCode",
-      "description": "State filter"
+      "type": "string",
+      "description": "State filter",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "DC",
+        "PR",
+        "VI",
+        "GU",
+        "AS",
+        "MP"
+      ]
     },
     "categories": {
       "type": "array",
       "description": "Category filters (SIC codes or category names)",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "clear": {
       "type": "boolean",

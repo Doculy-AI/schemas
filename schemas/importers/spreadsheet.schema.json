@@ -8,32 +8,66 @@
     "service": "spreadsheet",
     "action": "import"
   },
-  "required": ["file", "table"],
+  "required": [
+    "file",
+    "table"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "file": {
       "type": "string",
       "description": "Path to spreadsheet file (local path, URL, or gs:// GCS path)",
-      "examples": ["data.csv", "https://example.com/data.xlsx", "gs://bucket/file.csv"]
+      "examples": [
+        "data.csv",
+        "https://example.com/data.xlsx",
+        "gs://bucket/file.csv"
+      ]
     },
     "table": {
       "type": "string",
       "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
       "description": "Target PostgreSQL table name (schema.table format)",
-      "examples": ["staging.imported_data", "my_table"]
+      "examples": [
+        "staging.imported_data",
+        "my_table"
+      ]
     },
     "sheet": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "integer" },
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        },
         {
           "type": "array",
           "items": {
             "oneOf": [
-              { "type": "string" },
-              { "type": "integer" }
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
             ]
           }
         }
@@ -63,25 +97,39 @@
     "columnMappings": {
       "type": "object",
       "description": "Column name mappings (original -> target)",
-      "additionalProperties": { "type": "string" }
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "columnDefs": {
       "type": "object",
       "description": "Column type overrides",
       "additionalProperties": {
         "type": "string",
-        "enum": ["string", "integer", "bigint", "decimal", "boolean", "date", "timestamp"]
+        "enum": [
+          "string",
+          "integer",
+          "bigint",
+          "decimal",
+          "boolean",
+          "date",
+          "timestamp"
+        ]
       }
     },
     "includeCols": {
       "type": "array",
       "description": "Columns to include (imports all others if not specified)",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "excludeCols": {
       "type": "array",
       "description": "Columns to exclude from import",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "truncate": {
       "type": "boolean",

@@ -8,27 +8,54 @@
     "service": "arcgis",
     "action": "import"
   },
-  "required": ["url", "table"],
+  "required": [
+    "url",
+    "table"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "url": {
       "type": "string",
       "format": "uri",
       "description": "ArcGIS Feature Service, Feature Layer, Hub, or StoryMap URL",
-      "examples": ["https://services.arcgis.com/xxx/arcgis/rest/services/LayerName/FeatureServer/0"]
+      "examples": [
+        "https://services.arcgis.com/xxx/arcgis/rest/services/LayerName/FeatureServer/0"
+      ]
     },
     "table": {
       "type": "string",
       "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
       "description": "Target PostgreSQL table name, optionally with schema prefix (e.g., 'my_table' or 'schema.my_table')",
-      "examples": ["parcels", "staging.parcels"]
+      "examples": [
+        "parcels",
+        "staging.parcels"
+      ]
     },
     "where": {
       "type": "string",
       "description": "SQL WHERE clause to filter features",
-      "examples": ["STATE = 'TX'", "POP > 1000"]
+      "examples": [
+        "STATE = 'TX'",
+        "POP > 1000"
+      ]
     },
     "batchSize": {
       "type": "integer",
@@ -42,18 +69,29 @@
       "description": "Fields to include (imports all if not specified). Can be strings or mapping objects.",
       "items": {
         "oneOf": [
-          { "type": "string" },
+          {
+            "type": "string"
+          },
           {
             "type": "object",
-            "additionalProperties": { "type": "string" }
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         ]
       }
     },
     "layers": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ],
       "description": "Layer IDs to import from multi-layer services"
     },
@@ -81,9 +119,15 @@
       "description": "Custom column mapping (source field -> target value)",
       "additionalProperties": {
         "oneOf": [
-          { "type": "string" },
-          { "type": "number" },
-          { "type": "boolean" }
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
         ]
       }
     },
@@ -92,16 +136,29 @@
       "description": "Metadata object template to add to each record",
       "additionalProperties": {
         "oneOf": [
-          { "type": "string" },
-          { "type": "number" },
-          { "type": "boolean" }
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
         ]
       }
     },
     "geometryType": {
       "oneOf": [
-        { "$ref": "#/$defs/geometryType" },
-        { "type": "array", "items": { "$ref": "#/$defs/geometryType" } }
+        {
+          "$ref": "#/$defs/geometryType"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/geometryType"
+          }
+        }
       ],
       "description": "Expected geometry type(s)"
     }
@@ -109,7 +166,16 @@
   "$defs": {
     "geometryType": {
       "type": "string",
-      "enum": ["POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION", "GEOMETRY"]
+      "enum": [
+        "POINT",
+        "MULTIPOINT",
+        "LINESTRING",
+        "MULTILINESTRING",
+        "POLYGON",
+        "MULTIPOLYGON",
+        "GEOMETRYCOLLECTION",
+        "GEOMETRY"
+      ]
     }
   },
   "additionalProperties": false

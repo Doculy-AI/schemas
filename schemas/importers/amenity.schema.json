@@ -8,19 +8,98 @@
     "service": "amenity",
     "action": "import"
   },
-  "required": ["file"],
+  "required": [
+    "file"
+  ],
   "properties": {
     "parcell": {
-      "$ref": "../common/base.schema.json#/$defs/parcell"
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": [
+        "service",
+        "action"
+      ],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     },
     "file": {
       "type": "string",
       "description": "Path to ZIP file containing amenity data",
-      "examples": ["amenities.zip", "gs://bucket/amenities.zip"]
+      "examples": [
+        "amenities.zip",
+        "gs://bucket/amenities.zip"
+      ]
     },
     "state": {
-      "$ref": "../common/state.schema.json#/$defs/stateCode",
-      "description": "State filter (optional)"
+      "type": "string",
+      "description": "State filter (optional)",
+      "enum": [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        "DC",
+        "PR",
+        "VI",
+        "GU",
+        "AS",
+        "MP"
+      ]
     },
     "year": {
       "type": "integer",
