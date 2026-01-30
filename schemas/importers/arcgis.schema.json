@@ -14,14 +14,9 @@
     },
     "table": {
       "type": "string",
-      "pattern": "^[a-z_][a-z0-9_]*$",
-      "description": "Target PostgreSQL table name"
-    },
-    "schema": {
-      "type": "string",
-      "pattern": "^[a-z_][a-z0-9_]*$",
-      "description": "Target PostgreSQL schema",
-      "default": "public"
+      "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
+      "description": "Target PostgreSQL table name, optionally with schema prefix (e.g., 'my_table' or 'schema.my_table')",
+      "examples": ["parcels", "staging.parcels"]
     },
     "where": {
       "type": "string",
