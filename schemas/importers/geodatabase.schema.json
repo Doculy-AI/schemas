@@ -10,6 +10,9 @@
   },
   "required": ["file", "table"],
   "properties": {
+    "parcell": {
+      "$ref": "../common/base.schema.json#/$defs/parcell"
+    },
     "file": {
       "type": "string",
       "description": "Path to File Geodatabase directory (local path, URL, or gs:// GCS path)",

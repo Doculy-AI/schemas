@@ -10,6 +10,9 @@
   },
   "required": ["state", "lodesYear"],
   "properties": {
+    "parcell": {
+      "$ref": "../common/base.schema.json#/$defs/parcell"
+    },
     "state": {
       "$ref": "../common/state.schema.json#/$defs/stateCode",
       "description": "Two-letter US state code"

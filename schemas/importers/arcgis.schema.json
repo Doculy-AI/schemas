@@ -10,6 +10,9 @@
   },
   "required": ["url", "table"],
   "properties": {
+    "parcell": {
+      "$ref": "../common/base.schema.json#/$defs/parcell"
+    },
     "url": {
       "type": "string",
       "format": "uri",

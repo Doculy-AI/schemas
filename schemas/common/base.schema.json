@@ -19,6 +19,22 @@
       "pattern": "^[a-z_][a-z0-9_]*$",
       "default": "public",
       "description": "PostgreSQL schema name"
+    },
+    "parcell": {
+      "type": "object",
+      "description": "Parcell CLI metadata for service routing",
+      "required": ["service", "action"],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Target service name"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
