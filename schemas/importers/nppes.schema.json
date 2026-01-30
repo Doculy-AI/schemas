@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/nppes.schema.json",
+  "title": "NPPES Importer Configuration",
+  "description": "Configuration for importing healthcare provider data from NPPES (National Provider Registry)",
+  "type": "object",
+  "x-parcell": {
+    "service": "nppes",
+    "action": "import"
+  },
+  "required": ["state"],
+  "properties": {
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year suffix for table naming",
+      "minimum": 2020,
+      "maximum": 2030
+    },
+    "taxonomyCodes": {
+      "type": "array",
+      "description": "Provider taxonomy codes to filter (imports all if not specified)",
+      "items": { "type": "string" },
+      "examples": [["207R00000X", "208D00000X"]]
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

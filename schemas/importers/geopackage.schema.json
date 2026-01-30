@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/geopackage.schema.json",
+  "title": "GeoPackage Importer Configuration",
+  "description": "Configuration for importing GeoPackage (.gpkg) files into PostgreSQL/PostGIS",
+  "type": "object",
+  "x-parcell": {
+    "service": "geopackage",
+    "action": "import"
+  },
+  "required": ["file", "table"],
+  "properties": {
+    "file": {
+      "type": "string",
+      "description": "Path to GeoPackage file (local path, URL, or gs:// GCS path)",
+      "examples": ["data.gpkg", "https://example.com/data.gpkg", "gs://bucket/file.gpkg"]
+    },
+    "table": {
+      "type": "string",
+      "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
+      "description": "Target PostgreSQL table name (schema.table format)",
+      "examples": ["staging.parcels", "state_tx.boundaries"]
+    },
+    "layer": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Specific layer name(s) to import"
+    },
+    "layerIndex": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      ],
+      "description": "Layer index(es) to import (0-based)"
+    },
+    "allLayers": {
+      "type": "boolean",
+      "description": "Import all layers from the GeoPackage",
+      "default": false
+    },
+    "geometryType": {
+      "type": "string",
+      "enum": ["POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION", "GEOMETRY"],
+      "description": "Geometry type override"
+    },
+    "mixedGeometries": {
+      "type": "boolean",
+      "description": "Handle mixed geometry types in the file",
+      "default": false
+    },
+    "buffer": {
+      "type": "array",
+      "description": "Buffer distances to generate around geometries",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+(\\.\\d+)?\\s*(mi|km|m|ft)$"
+      },
+      "examples": [["500 ft", "1 mi", "5 mi"]]
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    },
+    "srid": {
+      "type": "integer",
+      "description": "Target SRID for geometry transformation",
+      "default": 4326
+    },
+    "skipValidation": {
+      "type": "boolean",
+      "description": "Skip geometry validation",
+      "default": false
+    },
+    "noCache": {
+      "type": "boolean",
+      "description": "Skip file cache for remote files",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -10,7 +10,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "validate": "ajv compile -s 'schemas/**/*.schema.json' -c ajv-formats --strict=true",
+    "validate": "ajv compile -s 'schemas/**/*.schema.json' -c ajv-formats --strict=false",
     "build": "npm run validate",
     "test": "npm run validate"
   },

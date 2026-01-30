@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/crexi.schema.json",
+  "title": "Crexi Importer Configuration",
+  "description": "Configuration for importing commercial real estate listings from Crexi",
+  "type": "object",
+  "x-parcell": {
+    "service": "crexi",
+    "action": "import"
+  },
+  "required": ["state"],
+  "properties": {
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year suffix for table naming",
+      "minimum": 2020,
+      "maximum": 2030
+    },
+    "propertyTypes": {
+      "type": "array",
+      "description": "Property types to import",
+      "items": { "type": "string" },
+      "examples": [["office", "retail", "industrial", "multifamily"]]
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    },
+    "maxPages": {
+      "type": "integer",
+      "description": "Maximum pages to scrape",
+      "minimum": 1,
+      "maximum": 1000
+    }
+  },
+  "additionalProperties": false
+}
