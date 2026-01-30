@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/osm.schema.json",
+  "title": "OpenStreetMap Importer Configuration",
+  "description": "Configuration for importing OpenStreetMap data from PBF files",
+  "type": "object",
+  "x-parcell": {
+    "service": "osm",
+    "action": "import"
+  },
+  "required": ["state"],
+  "properties": {
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
+    },
+    "pbfFile": {
+      "type": "string",
+      "description": "OSM PBF file path or URL (auto-downloads state PBF if not specified)"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year suffix for table naming",
+      "minimum": 2020,
+      "maximum": 2030
+    },
+    "categories": {
+      "type": "array",
+      "description": "OSM categories to import (e.g., parks, roads, buildings)",
+      "items": { "type": "string" },
+      "examples": [["parks", "schools", "hospitals"]]
+    },
+    "buffer": {
+      "type": "array",
+      "description": "Buffer distances to generate around geometries",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+(\\.\\d+)?\\s*(mi|km|m|ft)$"
+      },
+      "examples": [["0.5 mi", "1 mi"]]
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

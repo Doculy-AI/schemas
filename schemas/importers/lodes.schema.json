@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/lodes.schema.json",
+  "title": "LODES Employment Importer Configuration",
+  "description": "Configuration for importing LEHD Origin-Destination Employment Statistics",
+  "type": "object",
+  "x-parcell": {
+    "service": "lodes",
+    "action": "import"
+  },
+  "required": ["state", "lodesYear"],
+  "properties": {
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
+    },
+    "lodesYear": {
+      "type": "integer",
+      "description": "LODES data year to fetch",
+      "minimum": 2002,
+      "maximum": 2030
+    },
+    "tableYear": {
+      "type": "integer",
+      "description": "Year suffix for table naming (defaults to lodesYear)",
+      "minimum": 2020,
+      "maximum": 2030
+    },
+    "jobType": {
+      "type": "string",
+      "description": "Job type filter",
+      "enum": ["JT00", "JT01", "JT02", "JT03", "JT04", "JT05", "all", "primary", "private", "priv_primary", "federal", "fed_primary"],
+      "default": "JT00"
+    },
+    "segment": {
+      "type": "string",
+      "description": "Worker segment filter",
+      "enum": ["S000", "SA01", "SA02", "SA03", "SE01", "SE02", "SE03", "SI01", "SI02", "SI03", "all_workers", "age_29_under", "age_30_54", "age_55_over", "income_1250_under", "income_1251_3333", "income_3333_over", "goods_producing", "trade_transport_util", "other_services"],
+      "default": "S000"
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

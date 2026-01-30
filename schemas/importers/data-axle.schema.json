@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/data-axle.schema.json",
+  "title": "Data Axle Importer Configuration",
+  "description": "Configuration for importing business data from Data Axle extracts",
+  "type": "object",
+  "x-parcell": {
+    "service": "data-axle",
+    "action": "import"
+  },
+  "required": ["file", "table"],
+  "properties": {
+    "file": {
+      "type": "string",
+      "description": "Path to Data Axle data file",
+      "examples": ["data-axle-export.csv", "gs://bucket/data-axle.csv"]
+    },
+    "table": {
+      "type": "string",
+      "pattern": "^[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)?$",
+      "description": "Target PostgreSQL table name",
+      "examples": ["staging.businesses", "state_tx.data_axle"]
+    },
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "State filter"
+    },
+    "categories": {
+      "type": "array",
+      "description": "Category filters (SIC codes or category names)",
+      "items": { "type": "string" }
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    },
+    "mappingConfig": {
+      "type": "string",
+      "description": "Path to field mapping configuration file"
+    }
+  },
+  "additionalProperties": false
+}

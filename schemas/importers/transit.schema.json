@@ -1,49 +1,68 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/Doculy-AI/schemas/main/schemas/importers/transit.schema.json",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/transit.schema.json",
   "title": "GTFS Transit Importer Configuration",
-  "description": "Configuration for importing GTFS transit data",
+  "description": "Configuration for importing GTFS transit data from Mobility Data API",
   "type": "object",
-  "required": ["url", "agencyId"],
+  "x-parcell": {
+    "service": "transit",
+    "action": "import"
+  },
+  "required": ["state"],
   "properties": {
-    "url": {
-      "type": "string",
-      "format": "uri",
-      "description": "URL to GTFS feed (zip file)"
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
     },
-    "agencyId": {
-      "type": "string",
-      "description": "Unique identifier for the transit agency",
-      "pattern": "^[a-z0-9_-]+$"
+    "year": {
+      "type": "integer",
+      "description": "Year suffix for table naming",
+      "minimum": 2020,
+      "maximum": 2030
     },
-    "agencyName": {
+    "mobilityKey": {
       "type": "string",
-      "description": "Human-readable agency name"
+      "description": "Mobility Data API key (defaults to MOBILITY_KEY env var)"
     },
-    "schema": {
-      "type": "string",
-      "pattern": "^[a-z_][a-z0-9_]*$",
-      "description": "Target PostgreSQL schema",
-      "default": "transit"
-    },
-    "includeShapes": {
+    "clear": {
       "type": "boolean",
-      "description": "Import route shapes as geometries",
-      "default": true
-    },
-    "generateStopBuffers": {
-      "type": "boolean",
-      "description": "Generate buffer geometries around stops",
+      "description": "Clear existing data before import",
       "default": false
     },
-    "stopBufferDistances": {
+    "force": {
+      "type": "boolean",
+      "description": "Force update all feeds regardless of last import time",
+      "default": false
+    },
+    "agencies": {
       "type": "array",
-      "description": "Buffer distances for stop buffers",
+      "description": "Specific agency IDs to import (imports all if not specified)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "buffer": {
+      "type": "array",
+      "description": "Buffer distances to generate around transit stops",
       "items": {
         "type": "string",
         "pattern": "^\\d+(\\.\\d+)?\\s*(mi|km|m|ft)$"
       },
-      "default": ["0.25 mi", "0.5 mi"]
+      "examples": [["0.25 mi", "0.5 mi", "1 mi"]]
+    },
+    "jobs": {
+      "type": "integer",
+      "description": "Number of parallel jobs for downloading feeds",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 4
+    },
+    "retries": {
+      "type": "integer",
+      "description": "Maximum retries for failed downloads",
+      "minimum": 0,
+      "maximum": 10,
+      "default": 3
     }
   },
   "additionalProperties": false

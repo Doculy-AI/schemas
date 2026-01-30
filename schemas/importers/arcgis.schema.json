@@ -1,15 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/Doculy-AI/schemas/main/schemas/importers/arcgis.schema.json",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/arcgis.schema.json",
   "title": "ArcGIS Feature Layer Importer Configuration",
-  "description": "Configuration for importing data from ArcGIS Feature Services",
+  "description": "Configuration for importing data from ArcGIS Feature Services, Hub, and StoryMaps",
   "type": "object",
+  "x-parcell": {
+    "service": "arcgis",
+    "action": "import"
+  },
   "required": ["url", "table"],
   "properties": {
     "url": {
       "type": "string",
       "format": "uri",
-      "description": "ArcGIS Feature Service or Feature Layer URL",
+      "description": "ArcGIS Feature Service, Feature Layer, Hub, or StoryMap URL",
       "examples": ["https://services.arcgis.com/xxx/arcgis/rest/services/LayerName/FeatureServer/0"]
     },
     "table": {
@@ -23,34 +27,86 @@
       "description": "SQL WHERE clause to filter features",
       "examples": ["STATE = 'TX'", "POP > 1000"]
     },
-    "fields": {
-      "type": "array",
-      "description": "Specific fields to import (imports all if not specified)",
-      "items": {
-        "type": "string"
-      }
-    },
-    "geometryType": {
-      "type": "string",
-      "description": "Expected geometry type",
-      "enum": ["point", "multipoint", "polyline", "polygon", "multipolygon"]
-    },
-    "srid": {
-      "type": "integer",
-      "description": "Target SRID for geometry transformation",
-      "default": 4326
-    },
-    "truncate": {
-      "type": "boolean",
-      "description": "Truncate existing table before import",
-      "default": false
-    },
     "batchSize": {
       "type": "integer",
       "description": "Number of features to fetch per request",
       "minimum": 1,
       "maximum": 10000,
       "default": 1000
+    },
+    "fields": {
+      "type": "array",
+      "description": "Fields to include (imports all if not specified). Can be strings or mapping objects.",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        ]
+      }
+    },
+    "layers": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Layer IDs to import from multi-layer services"
+    },
+    "sameTable": {
+      "type": "boolean",
+      "description": "Import all layers into the same table",
+      "default": false
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    },
+    "includeBaseCols": {
+      "type": "boolean",
+      "description": "Add standard columns (id, created_dtm, updated_dtm, metadata)",
+      "default": true
+    },
+    "uniqueKey": {
+      "type": "string",
+      "description": "Field name to use as unique key for upsert operations"
+    },
+    "mapping": {
+      "type": "object",
+      "description": "Custom column mapping (source field -> target value)",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" }
+        ]
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Metadata object template to add to each record",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" }
+        ]
+      }
+    },
+    "geometryType": {
+      "oneOf": [
+        { "$ref": "#/$defs/geometryType" },
+        { "type": "array", "items": { "$ref": "#/$defs/geometryType" } }
+      ],
+      "description": "Expected geometry type(s)"
+    }
+  },
+  "$defs": {
+    "geometryType": {
+      "type": "string",
+      "enum": ["POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION", "GEOMETRY"]
     }
   },
   "additionalProperties": false

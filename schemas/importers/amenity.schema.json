@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/amenity.schema.json",
+  "title": "Amenity Importer Configuration",
+  "description": "Configuration for importing amenity/POI data with SIC code categorization",
+  "type": "object",
+  "x-parcell": {
+    "service": "amenity",
+    "action": "import"
+  },
+  "required": ["file"],
+  "properties": {
+    "file": {
+      "type": "string",
+      "description": "Path to ZIP file containing amenity data",
+      "examples": ["amenities.zip", "gs://bucket/amenities.zip"]
+    },
+    "state": {
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "State filter (optional)"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year suffix for table naming",
+      "minimum": 2020,
+      "maximum": 2030
+    },
+    "clear": {
+      "type": "boolean",
+      "description": "Clear existing data before import",
+      "default": false
+    },
+    "sicMappingConfig": {
+      "type": "string",
+      "description": "Path to SIC code mapping configuration file"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,27 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/Doculy-AI/schemas/main/schemas/importers/census.schema.json",
+  "$id": "https://schemas.yuli.doculy.ai/v1/importers/census.schema.json",
   "title": "Census Importer Configuration",
   "description": "Configuration for importing TIGER/Line census geography data",
   "type": "object",
+  "x-parcell": {
+    "service": "census",
+    "action": "import"
+  },
   "required": ["state", "datatype"],
   "properties": {
     "state": {
-      "type": "string",
-      "description": "Two-letter US state code",
-      "enum": [
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
-        "DC", "PR", "VI", "GU", "AS", "MP"
-      ]
+      "$ref": "../common/state.schema.json#/$defs/stateCode",
+      "description": "Two-letter US state code"
     },
     "datatype": {
       "type": "string",
       "description": "Type of census geography to import",
-      "enum": ["tract", "place", "block", "county", "block_group", "zcta"]
+      "enum": [
+        "place",
+        "block",
+        "census_block",
+        "tract",
+        "census_tract",
+        "county",
+        "block_group",
+        "state",
+        "cbsa",
+        "csa",
+        "congressional_district",
+        "school_district_elementary",
+        "school_district_secondary",
+        "school_district_unified",
+        "zip_code_tabulation_area",
+        "urban_area"
+      ]
     },
     "censusYear": {
       "type": "integer",
@@ -32,9 +45,13 @@
     },
     "tableYear": {
       "type": "integer",
-      "description": "ACS table data year",
+      "description": "Year suffix for destination table name",
       "minimum": 2010,
       "maximum": 2030
+    },
+    "dataDir": {
+      "type": "string",
+      "description": "Directory for downloaded data files"
     },
     "buffers": {
       "type": "array",
