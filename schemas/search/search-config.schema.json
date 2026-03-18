@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/search/search-config.schema.json",
+  "title": "V2 Search Configuration",
+  "description": "Configuration for V2 natural language search parameter definitions",
+  "type": "object",
+  "required": ["meta", "searchContext", "configs"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the search configuration",
+      "required": ["qapKey", "searchType", "version"],
+      "properties": {
+        "qapKey": {
+          "type": "string",
+          "description": "QAP identifier in format state:year (e.g., 'ga:2026')",
+          "pattern": "^[a-z]{2}:\\d{4}$"
+        },
+        "searchType": {
+          "type": "string",
+          "description": "Type of search this config applies to",
+          "enum": ["custom", "address", "parcel_number"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Version identifier (beta or prod)",
+          "enum": ["beta", "prod"]
+        },
+        "exportedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when config was exported"
+        }
+      },
+      "additionalProperties": false
+    },
+    "criteria": {
+      "type": "object",
+      "description": "Default criteria structure for searches",
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["and", "or"],
+          "default": "and"
+        },
+        "clauses": {
+          "type": "array",
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "searchContext": {
+      "type": "object",
+      "description": "Context for the search (state and year)",
+      "required": ["state", "year"],
+      "properties": {
+        "state": {
+          "type": "string",
+          "description": "Two-letter state code (lowercase)",
+          "pattern": "^[a-z]{2}$"
+        },
+        "year": {
+          "type": "integer",
+          "description": "QAP year",
+          "minimum": 2020,
+          "maximum": 2030
+        }
+      },
+      "additionalProperties": false
+    },
+    "configs": {
+      "type": "array",
+      "description": "Array of search parameter configurations",
+      "items": {
+        "$ref": "#/$defs/paramConfig"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "paramConfig": {
+      "type": "object",
+      "description": "Configuration for a single search parameter",
+      "required": ["paramName", "paramType", "llmDescription"],
+      "properties": {
+        "paramName": {
+          "type": "string",
+          "description": "Unique identifier for the parameter (camelCase)",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        },
+        "paramType": {
+          "type": "string",
+          "description": "Data type for the parameter",
+          "enum": [
+            "STRING",
+            "NUMBER",
+            "BOOLEAN",
+            "ARRAY<STRING>",
+            "ARRAY<NUMBER>",
+            "RANGE<NUMBER>",
+            "COORDINATES",
+            "ADDRESS",
+            "ADDRESS_WITH_RADIUS",
+            "COORDINATES_WITH_RADIUS"
+          ]
+        },
+        "llmDescription": {
+          "type": "string",
+          "description": "Description for AI to understand how to extract this parameter",
+          "minLength": 10
+        },
+        "llmExamples": {
+          "type": "string",
+          "description": "YAML-formatted examples showing query, returns, and reason"
+        },
+        "supportsHighest": {
+          "type": "boolean",
+          "description": "Whether this parameter supports the 'highest' or 'within_max' operator",
+          "default": false
+        },
+        "toSqlConfig": {
+          "$ref": "#/$defs/toSqlConfig"
+        },
+        "toSqlSnippet": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/toSqlSnippetConditional" }
+          ],
+          "description": "Custom SQL logic - either a string template or conditional object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "toSqlConfig": {
+      "type": "object",
+      "description": "Structured SQL generation configuration",
+      "properties": {
+        "column": {
+          "type": "string",
+          "description": "Database column reference (e.g., 'ps.total_score')"
+        },
+        "expression": {
+          "type": "string",
+          "description": "SQL expression template with ${variable} placeholders"
+        },
+        "tables": {
+          "type": "object",
+          "description": "Additional table definitions for joins",
+          "additionalProperties": {
+            "$ref": "#/$defs/tableDefinition"
+          }
+        },
+        "filters": {
+          "type": "array",
+          "description": "Additional filter conditions",
+          "items": {
+            "$ref": "#/$defs/filterDefinition"
+          }
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum value for the parameter"
+        },
+        "maxOffset": {
+          "type": "string",
+          "description": "SQL expression for offset from max value"
+        },
+        "isArrayCol": {
+          "type": "boolean",
+          "description": "Whether the column contains array values",
+          "default": false
+        },
+        "transform": {
+          "type": "string",
+          "description": "Value transformation to apply",
+          "enum": ["normalize", "lowercase"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "tableDefinition": {
+      "type": "object",
+      "description": "Definition for an additional table in a join",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of table join",
+          "enum": ["parcelFeature", "parcelSubScore", "custom"]
+        },
+        "tableName": {
+          "type": "string",
+          "description": "Full table name for custom type"
+        },
+        "feature": {
+          "type": "string",
+          "description": "Feature name for parcelFeature type"
+        },
+        "score": {
+          "type": "string",
+          "description": "Score type for parcelSubScore type"
+        },
+        "subscore": {
+          "type": "string",
+          "description": "Subscore name for parcelSubScore type"
+        },
+        "join": {
+          "type": "string",
+          "description": "Custom join condition"
+        }
+      },
+      "additionalProperties": false
+    },
+    "filterDefinition": {
+      "type": "object",
+      "description": "Additional filter condition",
+      "properties": {
+        "column": {
+          "type": "string",
+          "description": "Column to filter on"
+        },
+        "op": {
+          "type": "string",
+          "description": "Filter operator",
+          "enum": ["eq", "neq", "gt", "gte", "lt", "lte", "is_true", "is_false", "is_null", "is_not_null"]
+        },
+        "expr": {
+          "type": "string",
+          "description": "Expression value (with ${variable} support)"
+        },
+        "columnRef": {
+          "type": "string",
+          "description": "Reference to another column for comparison"
+        }
+      },
+      "additionalProperties": false
+    },
+    "toSqlSnippetConditional": {
+      "type": "object",
+      "description": "Conditional SQL snippets based on operator",
+      "properties": {
+        "$.op === 'in'": {
+          "type": "string",
+          "description": "SQL for 'in' operator"
+        },
+        "$.op === 'nin'": {
+          "type": "string",
+          "description": "SQL for 'nin' (not in) operator"
+        },
+        "$.op === 'eq'": {
+          "type": "string",
+          "description": "SQL for 'eq' (equals) operator"
+        },
+        "$.op === 'neq'": {
+          "type": "string",
+          "description": "SQL for 'neq' (not equals) operator"
+        },
+        "$.op === 'gt'": {
+          "type": "string",
+          "description": "SQL for 'gt' (greater than) operator"
+        },
+        "$.op === 'gte'": {
+          "type": "string",
+          "description": "SQL for 'gte' (greater than or equal) operator"
+        },
+        "$.op === 'lt'": {
+          "type": "string",
+          "description": "SQL for 'lt' (less than) operator"
+        },
+        "$.op === 'lte'": {
+          "type": "string",
+          "description": "SQL for 'lte' (less than or equal) operator"
+        },
+        "default": {
+          "type": "string",
+          "description": "Default SQL when no operator matches"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
