@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/correctable-feature/editable-cols.schema.json",
+  "title": "Correctable Feature — Editable Columns",
+  "description": "Defines the logical fields that can be corrected for a feature, keyed by stable logical field id. Each entry maps to one or more physical database columns. Used by the FYOD and Data Studio correction editors.",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/$defs/editableField"
+  },
+  "examples": [
+    {
+      "owner_name": {
+        "label": "Owner name",
+        "order": "a",
+        "type": "name",
+        "columns": ["owner_name"]
+      },
+      "location": {
+        "label": "Location",
+        "order": "m",
+        "type": "position",
+        "columns": ["lat", "lng"]
+      },
+      "zoning_note": {
+        "label": "Zoning note",
+        "order": "p",
+        "description": "Optional note about zoning classification",
+        "columns": ["zoning_note"]
+      }
+    }
+  ],
+  "$defs": {
+    "editableField": {
+      "type": "object",
+      "title": "Editable Field",
+      "description": "A single logical field exposed in the correction editor. The key is a stable logical field id (not necessarily a physical column name).",
+      "required": ["label", "order", "columns"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable label shown in the correction editor UI",
+          "examples": ["Owner name", "Location", "Zoning note"]
+        },
+        "order": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lexicographic sort key controlling the display order of fields in the editor. Use single letters (a, b, c) or fractional strings (a, am, b) to insert between siblings without renumbering.",
+          "examples": ["a", "b", "am", "p"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional notes about this field — shown as help text in the editor or as a tooltip",
+          "examples": ["The legal owner of record as it appears on the deed"]
+        },
+        "type": {
+          "type": "string",
+          "enum": ["name", "position", "bounds"],
+          "description": "Logical field type. Drives editor widget selection: 'name' = text input, 'position' = lat/lng pair, 'bounds' = geographic boundary. Omit when no general type applies.",
+          "examples": ["name", "position", "bounds"]
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z_][a-z0-9_]*$",
+            "description": "Physical column name — lowercase snake_case, matching the feature table's column"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Physical database column(s) this logical field corrects. Most fields map to one column; multi-column for composite fields such as position (lat + lng) or bounds (min_lat, max_lat, min_lng, max_lng).",
+          "examples": [
+            ["owner_name"],
+            ["lat", "lng"],
+            ["min_lat", "max_lat", "min_lng", "max_lng"]
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
