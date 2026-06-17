@@ -53,7 +53,11 @@
     },
     "editable_cols": {
       "$ref": "editable-cols.schema.json",
-      "description": "Logical fields exposed in the correction editor. Keyed by stable logical field id. Each field maps to one or more physical columns."
+      "description": "Logical fields exposed as editable inputs in the correction editor. Keyed by stable logical field id. Each field maps to one or more physical columns."
+    },
+    "readonly_cols": {
+      "$ref": "editable-cols.schema.json",
+      "description": "Columns shown read-only in the correction editor for context (e.g. parcel ID, address) but not editable. Same structure as editable_cols. Keyed by stable logical field id."
     },
     "active": {
       "type": "boolean",
