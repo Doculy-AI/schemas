@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/correctable-feature/correctable-feature-entry.schema.json",
+  "title": "Correctable Feature Registry Entry",
+  "description": "A single entry in core.config__correctable_feature. Describes one correctable feature slice (state × year × feature): its display info, binding column, and the set of logical fields that can be corrected via FYOD or Data Studio. Deliberately unversioned — edits take effect in place.",
+  "type": "object",
+  "required": ["state", "year", "feature", "stable_key_col", "display_name", "editable_cols"],
+  "properties": {
+    "state": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2,
+      "pattern": "^[A-Z]{2}$",
+      "description": "Two-letter US state code (FIPS/postal). Part of the natural key (state × year × feature).",
+      "examples": ["TX", "CA", "FL"]
+    },
+    "year": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$",
+      "description": "Four-digit data vintage year. Part of the natural key.",
+      "examples": ["2024", "2025"]
+    },
+    "feature": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "description": "Logical feature identifier. The table-name generator resolves this to the physical feature table, so entries survive table renames. Part of the natural key.",
+      "examples": ["transit_stop", "school", "grocery_store", "amenity"]
+    },
+    "stable_key_col": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "description": "The physical column that holds the feature's stable_key — the content-derived, reload-stable identity used to bind corrections. Never the surrogate row id.",
+      "examples": ["stable_key", "source_id"]
+    },
+    "type_col": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z_][a-z0-9_]*$",
+      "description": "Discriminator column for multitype feature tables (e.g. a table that holds both schools and daycares distinguished by a 'type' column). Null for single-type features.",
+      "examples": ["type", null]
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable name for this feature, shown in the correction editor and management UI.",
+      "examples": ["Transit Stops", "Schools", "Grocery Stores"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about what this feature contains, its data source, or caveats for correctors.",
+      "examples": ["GTFS-sourced transit stops. Route-level corrections only — do not modify stop coordinates without verifying the GTFS feed."]
+    },
+    "editable_cols": {
+      "$ref": "editable-cols.schema.json",
+      "description": "Logical fields exposed in the correction editor. Keyed by stable logical field id. Each field maps to one or more physical columns."
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Soft-delete flag. false = entry is deactivated and not surfaced to correction editors."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "state": "TX",
+      "year": "2024",
+      "feature": "transit_stop",
+      "stable_key_col": "stable_key",
+      "type_col": null,
+      "display_name": "Transit Stops",
+      "description": "GTFS-sourced transit stops for Texas 2024.",
+      "editable_cols": {
+        "stop_name": {
+          "label": "Stop name",
+          "order": "a",
+          "type": "name",
+          "columns": ["stop_name"]
+        },
+        "location": {
+          "label": "Location",
+          "order": "b",
+          "type": "position",
+          "description": "Geographic coordinates of the stop",
+          "columns": ["lat", "lng"]
+        }
+      },
+      "active": true
+    }
+  ]
+}
