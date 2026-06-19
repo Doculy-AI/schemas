@@ -12,7 +12,8 @@
       "owner_name": {
         "label": "Owner name",
         "order": "a",
-        "type": "name",
+        "type": "string",
+        "role": "name",
         "columns": ["owner_name"]
       },
       "location": {
@@ -55,9 +56,15 @@
         },
         "type": {
           "type": "string",
-          "enum": ["name", "position", "bounds"],
-          "description": "Logical field type. Drives editor widget selection: 'name' = text input, 'position' = lat/lng pair, 'bounds' = geographic boundary. Omit when no general type applies.",
-          "examples": ["name", "position", "bounds"]
+          "enum": ["string", "number", "integer", "boolean", "date", "enum", "position", "multipoint", "path", "bounds"],
+          "description": "Value/control type (the `type` axis). Scalar: string, number, integer, boolean, date, enum. Geometry: position, multipoint, path, bounds. Omit for a read-only context field.",
+          "examples": ["string", "number", "position", "enum"]
+        },
+        "role": {
+          "type": "string",
+          "enum": ["name", "address"],
+          "description": "Optional semantic role, orthogonal to `type`. 'name' marks the display-name / record-list title field; 'address' marks the primary address field. Each role requires type 'string' and is used at most once per feature.",
+          "examples": ["name", "address"]
         },
         "columns": {
           "type": "array",
