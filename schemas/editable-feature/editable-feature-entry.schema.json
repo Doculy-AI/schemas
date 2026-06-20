@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.yuli.doculy.ai/v1/correctable-feature/correctable-feature-entry.schema.json",
-  "title": "Correctable Feature Registry Entry",
-  "description": "A single entry in core.config__correctable_feature. Describes one correctable feature slice (state × year × feature): its display info, binding column, and the set of logical fields that can be corrected via FYOD or Data Studio. Deliberately unversioned — edits take effect in place.",
+  "$id": "https://schemas.yuli.doculy.ai/v1/editable-feature/editable-feature-entry.schema.json",
+  "title": "Editable Feature Registry Entry",
+  "description": "A single entry in core.config__editable_feature. Describes one editable feature slice (state × year × feature): its display info, binding column, and the set of logical fields that can be edited via FYOD or Data Studio. Deliberately unversioned — edits take effect in place.",
   "type": "object",
   "required": ["state", "year", "feature", "stable_key_col", "display_name", "editable_cols"],
   "properties": {

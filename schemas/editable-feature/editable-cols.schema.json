@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.yuli.doculy.ai/v1/correctable-feature/editable-cols.schema.json",
-  "title": "Correctable Feature — Editable Columns",
-  "description": "Defines the logical fields that can be corrected for a feature, keyed by stable logical field id. Each entry maps to one or more physical database columns. Used by the FYOD and Data Studio correction editors.",
+  "$id": "https://schemas.yuli.doculy.ai/v1/editable-feature/editable-cols.schema.json",
+  "title": "Editable Feature — Editable Columns",
+  "description": "Defines the logical fields that can be edited for a feature, keyed by stable logical field id. Each entry maps to one or more physical database columns. Used by the FYOD and Data Studio edit editors.",
   "type": "object",
   "additionalProperties": {
     "$ref": "#/$defs/editableField"
