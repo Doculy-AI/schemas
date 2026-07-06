@@ -92,19 +92,8 @@
         },
         "paramType": {
           "type": "string",
-          "description": "Data type for the parameter",
-          "enum": [
-            "STRING",
-            "NUMBER",
-            "BOOLEAN",
-            "ARRAY<STRING>",
-            "ARRAY<NUMBER>",
-            "RANGE<NUMBER>",
-            "COORDINATES",
-            "ADDRESS",
-            "ADDRESS_WITH_RADIUS",
-            "COORDINATES_WITH_RADIUS"
-          ]
+          "description": "Data type for the parameter. Base types (case-insensitive): STRING, NUMBER, BOOLEAN, ENUM<a,b,...>, LABEL, DISTANCE<unit> (unit is the default/storage unit: km, m, ft, mi, yd — e.g. DISTANCE<ft>), COORDINATES, COORDINATES_WITH_RADIUS, ADDRESS, ADDRESS_WITH_RADIUS. ARRAY<...> and RANGE<...> may wrap a base type (e.g. ARRAY<STRING>, ARRAY<ENUM<a,b>>, ARRAY<LABEL>, RANGE<NUMBER>).",
+          "pattern": "^\\s*[A-Za-z_]+\\s*(<.+>)?\\s*$"
         },
         "llmDescription": {
           "type": "string",
