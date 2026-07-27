@@ -24,5 +24,8 @@ export const dataAxleSchema: JSONSchema7;
 export const nppesSchema: JSONSchema7;
 export const foodAccessSchema: JSONSchema7;
 
+// Export field catalog schema (PARAPP-2029)
+export const exportFieldCatalogSchema: JSONSchema7;
+
 // Helper to generate placeholder YAML from schema
 export function generatePlaceholderYaml(schema: JSONSchema7): string;

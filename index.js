@@ -37,6 +37,9 @@ exports.dataAxleSchema = require('./schemas/importers/data-axle.schema.json');
 exports.nppesSchema = require('./schemas/importers/nppes.schema.json');
 exports.foodAccessSchema = require('./schemas/importers/food-access.schema.json');
 
+// Export field catalog schema (PARAPP-2029)
+exports.exportFieldCatalogSchema = require('./schemas/export-field-catalog/export-field-catalog.schema.json');
+
 // Helper to generate placeholder YAML from schema
 exports.generatePlaceholderYaml = function(schema) {
   if (!schema || !schema.properties) return '';

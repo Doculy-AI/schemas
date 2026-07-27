@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.yuli.doculy.ai/v1/export-field-catalog/export-field-catalog.schema.json",
+  "title": "Export Field Catalog",
+  "description": "Per-coordinate catalog of exportable parcel fields offered in the data-plane export field picker (PARAPP-2029). Authored in Yuli only; delivered to core.config__export_field_catalog. Each descriptor's `expr`/`join` are CONTROL-PLANE-ONLY SQL — delivered so the data plane can build its export query, but stripped from the client-facing projection.",
+  "type": "object",
+  "required": ["fields"],
+  "additionalProperties": false,
+  "properties": {
+    "active": {
+      "type": "boolean",
+      "description": "Controls the delivery table active flag. Defaults to true.",
+      "default": true
+    },
+    "fields": {
+      "type": "object",
+      "description": "Keyed map of stable field id -> field descriptor. The whole catalog for this coordinate.",
+      "propertyNames": {
+        "pattern": "^[a-z_][a-z0-9_]*$",
+        "description": "Stable field id: snake_case, must start with a lowercase letter or underscore."
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/fieldDescriptor"
+      }
+    }
+  },
+  "definitions": {
+    "fieldDescriptor": {
+      "type": "object",
+      "description": "A single exportable field.",
+      "required": ["label", "order", "expr", "format"],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column header shown in the export."
+        },
+        "order": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lexicographic sort key (e.g. \"a\", \"b\", \"am\") controlling field order in the picker."
+        },
+        "group": {
+          "type": "string",
+          "description": "Grouping bucket in the picker."
+        },
+        "role": {
+          "type": "string",
+          "description": "Semantic role (e.g. \"name\", \"address\"), orthogonal to format."
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Pre-checked in the picker / used when no explicit field selection is given.",
+          "default": false
+        },
+        "expr": {
+          "type": "string",
+          "minLength": 1,
+          "description": "SQL select expression. CONTROL-PLANE-ONLY — never sent to the client."
+        },
+        "join": {
+          "type": "string",
+          "description": "SQL join clause. CONTROL-PLANE-ONLY — never sent to the client."
+        },
+        "format": {
+          "$ref": "#/definitions/fieldFormat"
+        }
+      }
+    },
+    "fieldFormat": {
+      "type": "object",
+      "description": "How the field's raw value is formatted for display. `type` maps 1:1 to the parcell-ui formatter functions.",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Formatter to apply. Must be one of the supported functions.",
+          "enum": [
+            "string",
+            "number",
+            "num",
+            "currency",
+            "money",
+            "date",
+            "shortNumber",
+            "round"
+          ]
+        },
+        "precision": {
+          "type": "number",
+          "description": "Fraction digits / rounding precision (used by num / shortNumber / round)."
+        },
+        "unit": {
+          "type": "string",
+          "description": "Suffix appended to the formatted value, e.g. \"ac\", \"sq ft\"."
+        }
+      }
+    }
+  }
+}
