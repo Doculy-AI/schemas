@@ -28,18 +28,13 @@
     "fieldDescriptor": {
       "type": "object",
       "description": "A single exportable field.",
-      "required": ["label", "order", "expr", "format"],
+      "required": ["label", "expr", "format"],
       "additionalProperties": false,
       "properties": {
         "label": {
           "type": "string",
           "minLength": 1,
           "description": "Column header shown in the export."
-        },
-        "order": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Lexicographic sort key (e.g. \"a\", \"b\", \"am\") controlling field order in the picker."
         },
         "group": {
           "type": "string",
